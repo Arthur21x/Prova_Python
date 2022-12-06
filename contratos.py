@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from Curso_Udemy.aula75.Prova_Python.colaborador import Colaborador
+from Prova_Python.colaborador import Colaborador
 from itertools import count
 
 

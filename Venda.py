@@ -1,4 +1,4 @@
-from Curso_Udemy.aula75.Prova_Python.contratos import ContratoComissionado
+from Prova_Python.contratos import ContratoComissionado
 from itertools import count
 
 

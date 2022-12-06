@@ -24,10 +24,7 @@ class Colaborador:
 
     @cpf.setter
     def cpf(self, cpf: str) -> None:
-        if self.valida_cpf(cpf):
-            self._cpf = cpf
-        else:
-            raise ValueError("Digite um CPF válido, por favor...")
+        self._cpf = cpf
 
     @property
     def nome(self) -> str:
@@ -56,8 +53,8 @@ class Colaborador:
     def situacao(self, situacao) -> None:
         self._situacao = situacao
 
-    @staticmethod
-    def valida_cpf(cpf: str) -> bool:
+    def valida_cpf(self) -> bool:
+        cpf = self.cpf
         if len(cpf) == 11 and isinstance(cpf, str) and cpf.isnumeric():
             nove_digitos = cpf[:9]
             contador_regressivo_1 = 10
