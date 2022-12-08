@@ -14,6 +14,9 @@ def menu():
 
 
 def inserir_Colaborador(lista_colaboradores) -> list:
+    print("-" * 40)
+    print("\t\tInserção de Colaborador")
+    print("-" * 40)
     while True:
         matricula = str(input("Digite a sua matrícula:"))
         if matricula.isnumeric():
@@ -23,10 +26,11 @@ def inserir_Colaborador(lista_colaboradores) -> list:
     dia = int(input("Digite o Dia em que Nasceu:"))
     mes = int(input("Digite o Mês em que Nasceu:"))
     ano = int(input("Digite o ano em que Nasceu:"))
-    print("-" * 40)
     colaborador = Colaborador(matricula, cpf, nome, dia, mes, ano)
     if colaborador.valida_cpf():
         lista_colaboradores.insert(len(lista_colaboradores), colaborador)
+        print("-" * 40)
+        print(f"Colaborador {colaborador.nome} criado com Sucesso")
         return lista_colaboradores
     raise ValueError("O CPF digitado não é válido")
 
@@ -84,11 +88,13 @@ def Registrar_Contrato(lista_colaborador, lista_contrato) -> list:
         contrato = ContratoComissionado(dia, mes, ano, colaborador, comissao, ajudaCusto)
         contrato.ativo = True
         lista_contrato.append(contrato)
-    print("-" * 40)
     return lista_contrato
 
 
 def consultar_contrato(lista_contrato) -> None:
+    print("-" * 40)
+    print("Listagem de Colaboradores Ativos")
+    print("-" * 40)
     id = str(input("Digite o identificador do seu Contrato: "))
     get_contrato = gera_pesquisa(lista_contrato)
     contrato = get_contrato(id)
@@ -107,7 +113,7 @@ def consultar_colaboradores(lista_colaborador) -> None:
             print(f"Matrícula: {colaborador.matricula}")
             print(f"Nome: {colaborador.nome}")
             print(f"CPF: {colaborador.cpf}")
-            print("-" * 40)
+            print("-"*40)
 
 
 lista_colaborador, lista_contratos = list(), list()
