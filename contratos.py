@@ -9,7 +9,7 @@ class Contrato(ABC):
         self._ativo = ativo
         self._colaborador = colaborador
         self._dataEncerramento = None
-        self._dataInicio = datetime(dia, mes, ano)
+        self._dataInicio = datetime(ano, mes, dia)
         self._id = count()
 
     @property
