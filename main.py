@@ -1,5 +1,5 @@
 from colaborador import Colaborador
-from contratos import ContratoComissionado, ContratoHorista, ContratoAssalariado
+from contratos import ContratoComissionado, ContratoHorista, ContratoAssalariado, Contrato
 from Venda import vendasComissionadas
 
 
@@ -13,7 +13,7 @@ def menu():
     print("-" * 40)
 
 
-def Inserir_Colaborador(lista_colaborador) -> list:
+def inserir_Colaborador(lista_colaborador) -> list:
     while True:
         matricula = str(input("Digite a sua matrícula:"))
         if matricula.isnumeric():
@@ -31,15 +31,21 @@ def Inserir_Colaborador(lista_colaborador) -> list:
     raise ValueError("O CPF digitado não é válido")
 
 
-def Pesquisar_colaborador(matricula, lista_colaborador) -> Colaborador:
+def pesquisar_colaborador(matricula, lista_colaborador) -> Colaborador:
     for colaborador in lista_colaborador:
         if colaborador.matricula == matricula:
             return colaborador
 
 
+def pesquisar_contrato(id, lista_contrato) -> Contrato:
+    for contrato in lista_contrato:
+        if contrato.id == id:
+            return contrato
+
+
 def Registrar_Contrato(lista_colaborador, lista_contrato) -> list:
     matricula = str(input("Digite a Matricula do colaborador: "))
-    colaborador = Pesquisar_colaborador(matricula, lista_colaborador)
+    colaborador = pesquisar_colaborador(matricula, lista_colaborador)
     colaborador.ativar()
     contratos = [
         "Contrato Assalariado",
@@ -64,27 +70,30 @@ def Registrar_Contrato(lista_colaborador, lista_contrato) -> list:
         contrato = ContratoAssalariado(dia, mes, ano, colaborador, salario, Insalubridade, Periculosidade)
         contrato.ativo = True
         lista_contrato.append(contrato)
-        return lista_contrato
     elif op == 2:
         horaMes = int(input("Digite quantas horas você faz por mês: "))
         valorHora = int(input("Digite o valor que você recebe por Hora: "))
         contrato = ContratoHorista(dia, mes, ano, colaborador, horaMes, valorHora)
         contrato.ativo = True
         lista_contrato.append(contrato)
-        return lista_contrato
     elif op == 3:
         comissao = float(input("Digite o seu Percentual de Comissão: "))
         ajudaCusto = float(input("Digite o seu valor de ajuda nos Custos:"))
         contrato = ContratoComissionado(dia, mes, ano, colaborador, comissao, ajudaCusto)
         contrato.ativo = True
         lista_contrato.append(contrato)
-        return lista_contrato
+    return lista_contrato
+
+
+def consultar_contrato(lista_contrato) -> None:
+    id = str(input("Digite a Matricula do colaborador: "))
+    colaborador = pesquisar_contrato(id, lista_contrato)
 
 
 lista_colaborador, lista_contratos = list, list
 while True:
     comandos = {
-        "1": lambda: Inserir_Colaborador(lista_colaborador),
+        "1": lambda: inserir_Colaborador(lista_colaborador),
         "2": lambda: Registrar_Contrato(lista_colaborador, lista_contratos)
     }
     menu()

@@ -1,4 +1,4 @@
-from Prova_Python.contratos import ContratoComissionado
+from contratos import ContratoComissionado
 from itertools import count
 
 
