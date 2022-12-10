@@ -75,33 +75,51 @@ def Registrar_Contrato(lista_colaborador, lista_contrato) -> list:
         Periculosidade = float(input("Digite o percentual de Periculosidade: "))
         contrato = ContratoAssalariado(dia, mes, ano, colaborador, salario, Insalubridade, Periculosidade)
         contrato.ativo = True
+        contrato.id = len(lista_contrato) + 1
+        print(contrato.id)
         lista_contrato.append(contrato)
     elif op == 2:
         horaMes = int(input("Digite quantas horas você faz por mês: "))
         valorHora = int(input("Digite o valor que você recebe por Hora: "))
         contrato = ContratoHorista(dia, mes, ano, colaborador, horaMes, valorHora)
         contrato.ativo = True
+        contrato.id = len(lista_contrato) + 1
         lista_contrato.append(contrato)
     elif op == 3:
         comissao = float(input("Digite o seu Percentual de Comissão: "))
         ajudaCusto = float(input("Digite o seu valor de ajuda nos Custos:"))
         contrato = ContratoComissionado(dia, mes, ano, colaborador, comissao, ajudaCusto)
         contrato.ativo = True
+        contrato.id = len(lista_contrato) + 1
         lista_contrato.append(contrato)
     return lista_contrato
 
 
 def consultar_contrato(lista_contrato) -> None:
     print("-" * 40)
-    print("Listagem de Colaboradores Ativos")
+    print("Listagem de Contratos")
     print("-" * 40)
-    id = str(input("Digite o identificador do seu Contrato: "))
+    while True:
+        id = int(input("Digite o identificador do seu Contrato: "))
+        if id in [x for x in range(1, len(lista_contrato) + 1)]:
+            break
+        print("Digite um ID válido")
     get_contrato = gera_pesquisa(lista_contrato)
     contrato = get_contrato(id)
-    contrato = contrato.__dict__
-    for k, v in contrato.items():
-        print(f"{k}: {v}")
-    print("-"*40)
+    print(f"Data do início do Contrato: {contrato.dataInicio}")
+    if contrato.dataEncerramento is None:
+        print("O contrato não foi encerrado ainda")
+    else:
+        print(f"Data do Encerramento: {contrato.dataEncerramento}")
+    if contrato.ativo is True:
+        print("Situação: Ativo")
+    else:
+        print("Situação: Desativado")
+    print(f"Tipo do Contrato: {contrato.__class__.__name__}")
+    print(f"Matrícula do colaborador: {contrato.colaborador.matricula}")
+    print(f"Nome do colaborador: {contrato.colaborador.nome}")
+    print(f"CPF do colaborador: {contrato.colaborador.cpf}")
+    print(f"Situação do colaborador: {contrato.colaborador.situacao}")
 
 
 def consultar_colaboradores(lista_colaborador) -> None:
@@ -113,7 +131,30 @@ def consultar_colaboradores(lista_colaborador) -> None:
             print(f"Matrícula: {colaborador.matricula}")
             print(f"Nome: {colaborador.nome}")
             print(f"CPF: {colaborador.cpf}")
-            print("-"*40)
+            print("-" * 40)
+
+
+def encerrarContrato(lista_contrato):
+    print("-" * 40)
+    print("Listagem de Contratos")
+    print("-" * 40)
+    while True:
+        id = int(input("Digite o identificador do seu Contrato: "))
+        if id in [x for x in range(1, len(lista_contrato) + 1)]:
+            break
+        print("Digite um ID válido")
+    get_contrato = gera_pesquisa(lista_contrato)
+    contrato = get_contrato(id)
+    if contrato.ativo is False:
+        print("O contrato já está inativo")
+        return
+    else:
+        dia = int(input("Digite o Dia do Encerramento Seu contrato: "))
+        mes = int(input("Digite o Mês do Encerramento Seu contrato: "))
+        ano = int(input("Digite o ano do Encerramento Seu contrato: "))
+        contrato.EncerrarContrato(dia, mes, ano)
+        print("-" * 40)
+        print("Contrato Encerrado com sucesso")
 
 
 lista_colaborador, lista_contratos = list(), list()
@@ -122,6 +163,7 @@ while True:
         "1": lambda: inserir_Colaborador(lista_colaborador),
         "2": lambda: Registrar_Contrato(lista_colaborador, lista_contratos),
         "3": lambda: consultar_contrato(lista_contratos),
+        "4": lambda: encerrarContrato(lista_contratos),
         "5": lambda: consultar_colaboradores(lista_colaborador)
     }
     menu()

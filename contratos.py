@@ -10,11 +10,15 @@ class Contrato(ABC):
         self._colaborador = colaborador
         self._dataEncerramento = None
         self._dataInicio = datetime(ano, mes, dia)
-        self._id = count()
+        self._id = None
 
     @property
     def id(self):
         return self._id
+
+    @id.setter
+    def id(self, id):
+        self._id = id
 
     @property
     def dataInicio(self) -> datetime:
@@ -48,11 +52,13 @@ class Contrato(ABC):
     def ativo(self, status: bool) -> None:
         self._ativo = status
 
-    def EncerrarContrato(self):
+    def EncerrarContrato(self, dia, mes, ano):
         hoje = datetime.today().day
-        dif = abs((hoje - self.dataInicio.day))
+        self.dataEncerramento = datetime(ano, mes, dia)
+        dif = abs((hoje - self.dataEncerramento.day))
         if dif > 0:
             self.ativo = False
+            self.colaborador.situacao = False
 
     @abstractmethod
     def calcVencimento(self) -> float:
