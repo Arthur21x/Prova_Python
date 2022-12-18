@@ -1,5 +1,5 @@
 from Curso_Udemy.aula75.Prova_Python.colaborador import Colaborador
-from Curso_Udemy.aula75.Prova_Python.contratos import ContratoComissionado, ContratoHorista, ContratoAssalariado, \
+from Curso_Udemy.aula75.Prova_Python.contratos import Comissionado, Horista, Assalariado, \
     Contrato
 from Curso_Udemy.aula75.Prova_Python.Venda import vendasComissionadas
 
@@ -45,6 +45,8 @@ def gera_pesquisa(lista_classe):
             except AttributeError:
                 if classe.matricula == id:
                     return classe
+                elif classe.cpf == id:
+                    return classe
 
     return pesquisa_classe
 
@@ -74,7 +76,7 @@ def Registrar_Contrato(lista_colaborador, lista_contrato) -> list:
         salario = float(input("Digite o seu salário: "))
         Insalubridade = float(input("Digite o percentual de Insalubridade: "))
         Periculosidade = float(input("Digite o percentual de Periculosidade: "))
-        contrato = ContratoAssalariado(dia, mes, ano, colaborador, salario, Insalubridade, Periculosidade)
+        contrato = Assalariado(dia, mes, ano, colaborador, salario, Insalubridade, Periculosidade)
         contrato.ativo = True
         contrato.id = len(lista_contrato) + 1
         print(contrato.id)
@@ -82,14 +84,14 @@ def Registrar_Contrato(lista_colaborador, lista_contrato) -> list:
     elif op == 2:
         horaMes = int(input("Digite quantas horas você faz por mês: "))
         valorHora = int(input("Digite o valor que você recebe por Hora: "))
-        contrato = ContratoHorista(dia, mes, ano, colaborador, horaMes, valorHora)
+        contrato = Horista(dia, mes, ano, colaborador, horaMes, valorHora)
         contrato.ativo = True
         contrato.id = len(lista_contrato) + 1
         lista_contrato.append(contrato)
     elif op == 3:
         comissao = float(input("Digite o seu Percentual de Comissão: "))
         ajudaCusto = float(input("Digite o seu valor de ajuda nos Custos:"))
-        contrato = ContratoComissionado(dia, mes, ano, colaborador, comissao, ajudaCusto)
+        contrato = Comissionado(dia, mes, ano, colaborador, comissao, ajudaCusto)
         contrato.ativo = True
         contrato.id = len(lista_contrato) + 1
         lista_contrato.append(contrato)
@@ -109,7 +111,7 @@ def consultar_contrato(lista_contrato) -> None:
     contrato = get_contrato(id)
     print(f"Data do início do Contrato: {contrato.dataInicio}")
     if contrato.dataEncerramento is None:
-        print("O contrato não foi encerrado ainda")
+        print("Data do Encerramento: Não há data de encerramento")
     else:
         print(f"Data do Encerramento: {contrato.dataEncerramento}")
     if contrato.ativo is True:
@@ -137,7 +139,7 @@ def consultar_colaboradores(lista_colaborador) -> None:
 
 def encerrarContrato(lista_contrato):
     print("-" * 40)
-    print("Listagem de Contratos")
+    print("Encerramento de Contrato")
     print("-" * 40)
     while True:
         id = int(input("Digite o identificador do seu Contrato: "))
@@ -155,4 +157,24 @@ def encerrarContrato(lista_contrato):
         ano = int(input("Digite o ano do Encerramento Seu contrato: "))
         contrato.EncerrarContrato(dia, mes, ano)
         print("-" * 40)
-        print("Contrato Encerrado com sucesso")
+        print(f"Contrato de {contrato.colaborador.nome} foi Encerrado com sucesso")
+
+
+def consultar_contrato_colaborador(lista_contratos):
+    print("-" * 40)
+    print("Listagem de contratos")
+    print("-" * 40)
+    cpf = int(input("Digite o CPF do seu colaborador"))
+    for contrato in lista_contratos:
+        if contrato.colaborador.cpf == cpf:
+            print("----COLABORADOR----")
+            print(f"Nome: {contrato.colaborador.nome}")
+            print(f"CPF: {contrato.colaborador.cpf}")
+            print(f"Situação: {contrato.colaborador.situacao}")
+            print(f"----CONTRATOS DE {contrato.colaborador.nome}----")
+            print(f"Id: {contrato.id}")
+            print(f"Tipo de Contrato: {contrato.__class__.__name__}")
+            print(f"Data de início: {contrato.dataInicio}")
+            print(f"Data de Encerramento: {contrato.dataEncerramento}")
+            print(f"Situação do contrato: {contrato.ativo}")
+            break

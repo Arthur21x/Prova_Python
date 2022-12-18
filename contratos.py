@@ -25,16 +25,22 @@ class Contrato(ABC):
         return self._dataInicio
 
     @dataInicio.setter
-    def dataInicio(self, dataInicio: str) -> None:
-        self._dataInicio = datetime.strptime(dataInicio, "%Y-%m-%d")
+    def dataInicio(self, dataInicio) -> None:
+        try:
+            self._dataInicio = datetime.strptime(dataInicio, "%Y-%m-%d")
+        except TypeError:
+            self._dataInicio = dataInicio.strftime("%Y-%m-%d")
 
     @property
     def dataEncerramento(self) -> datetime:
         return self._dataEncerramento
 
     @dataEncerramento.setter
-    def dataEncerramento(self, dataEncerramento: str) -> None:
-        self._dataEncerramento = datetime.strptime(dataEncerramento, "%Y-%m-%d")
+    def dataEncerramento(self, dataEncerramento) -> None:
+        try:
+            self._dataEncerramento = datetime.strptime(dataEncerramento, "%Y-%m-%d")
+        except TypeError:
+            self._dataEncerramento = dataEncerramento.strftime("%Y-%m-%d")
 
     @property
     def colaborador(self) -> Colaborador:
@@ -53,19 +59,20 @@ class Contrato(ABC):
         self._ativo = status
 
     def EncerrarContrato(self, dia, mes, ano):
-        hoje = datetime.today().day
+        hoje = datetime.today()
         self.dataEncerramento = datetime(ano, mes, dia)
-        dif = abs((hoje - self.dataEncerramento.day))
+        dataEncerramento_copia = datetime(ano, mes, dia)
+        dif = abs((dataEncerramento_copia - hoje).days)
+        print(dif)
         if dif > 0:
             self.ativo = False
-            self.colaborador.situacao = False
 
     @abstractmethod
     def calcVencimento(self) -> float:
         pass
 
 
-class ContratoAssalariado(Contrato):
+class Assalariado(Contrato):
     def __init__(self, dia: int, mes: int, ano: int, colaborador: Colaborador
                  , salarioMensal: float, percInsalubridade: float = 0,
                  percPericulosidade: float = 0) -> None:
@@ -104,7 +111,7 @@ class ContratoAssalariado(Contrato):
             return venc
 
 
-class ContratoComissionado(Contrato):
+class Comissionado(Contrato):
     def __init__(self, dia: int, mes: int, ano: int, colaborador: Colaborador,
                  perComissao: float, ajudaCusto: float) -> None:
         super().__init__(dia, mes, ano, colaborador)
@@ -134,7 +141,7 @@ class ContratoComissionado(Contrato):
             return venc
 
 
-class ContratoHorista(Contrato):
+class Horista(Contrato):
     def __init__(self, dia: int, mes: int, ano: int, colaborador: Colaborador,
                  horaMes: int, valorHora: float) -> None:
         super().__init__(dia, mes, ano, colaborador)

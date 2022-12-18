@@ -1,9 +1,9 @@
-from contratos import ContratoComissionado
+from contratos import Comissionado
 from itertools import count
 
 
 class vendasComissionadas:
-    def __init__(self, mes: int, ano: int, valor: float, contrComissionado: ContratoComissionado):
+    def __init__(self, mes: int, ano: int, valor: float, contrComissionado: Comissionado):
         self._id = count
         self._mes = mes
         self._ano = ano
@@ -39,7 +39,7 @@ class vendasComissionadas:
         self._valor = valor
 
     @property
-    def contrComissionado(self) -> ContratoComissionado:
+    def contrComissionado(self) -> Comissionado:
         return self._contrComissionado
 
     @contrComissionado.setter
