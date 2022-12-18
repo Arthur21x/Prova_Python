@@ -164,17 +164,67 @@ def consultar_contrato_colaborador(lista_contratos):
     print("-" * 40)
     print("Listagem de contratos")
     print("-" * 40)
-    cpf = int(input("Digite o CPF do seu colaborador"))
+    cpf = str(input("Digite o CPF do seu colaborador: "))
     for contrato in lista_contratos:
         if contrato.colaborador.cpf == cpf:
             print("----COLABORADOR----")
             print(f"Nome: {contrato.colaborador.nome}")
             print(f"CPF: {contrato.colaborador.cpf}")
             print(f"Situação: {contrato.colaborador.situacao}")
-            print(f"----CONTRATOS DE {contrato.colaborador.nome}----")
+            print(f"----CONTRATO DE {contrato.colaborador.nome}----")
             print(f"Id: {contrato.id}")
             print(f"Tipo de Contrato: {contrato.__class__.__name__}")
             print(f"Data de início: {contrato.dataInicio}")
             print(f"Data de Encerramento: {contrato.dataEncerramento}")
             print(f"Situação do contrato: {contrato.ativo}")
             break
+
+
+def lancar_vendas_comissionadas(lista_contratos, venda_comissionada):
+    print("-" * 40)
+    print("Lançamento de vendas Comissionadas")
+    print("-" * 40)
+    while True:
+        id = int(input("Digite o identificador do seu Contrato: "))
+        if id in [x for x in range(1, len(lista_contratos) + 1)]:
+            break
+        print("Contrato não existe, ou ID inválido, por favor tente novamente!")
+    for contrato in lista_contratos:
+        tipo_contrato = contrato.__class__.__name__
+        if contrato.id == id:
+            if tipo_contrato == "Comissionado" and tipo_contrato is True:
+                mes = int(input("Digite o Mês das Vendas: "))
+                ano = int(input("Digite o ano das Vendas: "))
+                valor_total = int(input("Digite o Valor total da vendas do mês: "))
+                venda_comissionada.append(vendasComissionadas(mes, ano, valor_total, contrato))
+                return venda_comissionada
+            elif tipo_contrato != "Comissionado" or contrato.ativo is False:
+                print("APENAS CONTRATOS COMISSIONADOS PODEM LANÇAR VENDAS COMISSIONADAS")
+                return
+
+
+def emitir_folha_pagamento(lista_contratos, venda_comissionada):
+    print("-" * 40)
+    print("Emitir folha de pagamento")
+    print("-" * 40)
+    while True:
+        id = int(input("Digite o identificador do seu Contrato: "))
+        if id in [x for x in range(1, len(lista_contratos) + 1)]:
+            break
+        print("Contrato não existe, ou ID inválido, por favor tente novamente!")
+    for contrato in lista_contratos:
+        if contrato.ativo is True:
+            print("----COLABORADOR----")
+            print(f"Nome: {contrato.colaborador.nome}")
+            print(f"Matrícula: {contrato.colaborador.matricula}")
+            if contrato.__class__.__name__ == "Comissionado":
+                for venda in venda_comissionada:
+                    if venda.contrComissionado.id == contrato.id:
+                        print(f"Salário: {contrato.calcVencimento(venda.valor)}")
+            else:
+                print(f"Salário: {contrato.calcVencimento()}")
+            print(f"----CONTRATO DE {contrato.colaborador.nome}----")
+            print(f"Id: {contrato.id}")
+            print(f"Tipo de Contrato: {contrato.__class__.__name__}")
+        else:
+            print("Só é possível emitir folha de contratos ativos")

@@ -3,8 +3,10 @@ from itertools import count
 
 
 class vendasComissionadas:
+    identificador = count()
+
     def __init__(self, mes: int, ano: int, valor: float, contrComissionado: Comissionado):
-        self._id = count
+        self._id = vendasComissionadas.identificador
         self._mes = mes
         self._ano = ano
         self._valor = valor
